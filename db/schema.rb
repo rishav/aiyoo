@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160210212934) do
+ActiveRecord::Schema.define(version: 20160210214441) do
+
+  create_table "chat_threads", force: :cascade do |t|
+    t.string   "thread_type"
+    t.string   "title"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "chat_users", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "chat_thread_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "chat_users", ["chat_thread_id"], name: "index_chat_users_on_chat_thread_id"
+  add_index "chat_users", ["user_id"], name: "index_chat_users_on_user_id"
 
   create_table "friends", force: :cascade do |t|
     t.integer  "user_id"
@@ -32,6 +49,16 @@ ActiveRecord::Schema.define(version: 20160210212934) do
   end
 
   add_index "friendships", ["user_id"], name: "index_friendships_on_user_id"
+
+  create_table "messages", force: :cascade do |t|
+    t.integer  "chat_thread_id"
+    t.integer  "user_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "messages", ["chat_thread_id"], name: "index_messages_on_chat_thread_id"
+  add_index "messages", ["user_id"], name: "index_messages_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
